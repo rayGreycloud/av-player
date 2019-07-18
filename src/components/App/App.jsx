@@ -1,17 +1,19 @@
 import React from 'react';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import Player from '../Player';
-import './App.css';
 
-function App() {
-  return (
-    <div className='App'>
-      <header className='App-header'>
-        <h1>Videoplayer</h1>
-      </header>
-      <Player />
-    </div>
-  );
-}
+import GlobalStyle from './GlobalStyle';
+
+const App = () => (
+  <BrowserRouter>
+    <Switch>
+      <Route exact path='/' component={Player} />
+      <Route exact path='/:activeVideo' component={Player} />
+    </Switch>
+
+    <GlobalStyle />
+  </BrowserRouter>
+);
 
 export default App;
