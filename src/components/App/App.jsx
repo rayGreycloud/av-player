@@ -1,5 +1,6 @@
 import React from 'react';
 
+import Player from '../Player';
 import './App.css';
 
 function App() {
@@ -8,6 +9,7 @@ function App() {
       <header className='App-header'>
         <h1>Videoplayer</h1>
       </header>
+      <Player />
     </div>
   );
 }
