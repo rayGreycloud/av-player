@@ -4,12 +4,14 @@ import PlaylistHeader from './PlaylistHeader';
 import PlaylistItems from './PlaylistItems';
 import NightMode from '../Nightmode';
 
+import StyledPlaylist from './StyledPlaylist';
+
 const Playlist = props => (
-  <>
+  <StyledPlaylist>
     <NightMode />
     <PlaylistHeader />
     <PlaylistItems />
-  </>
+  </StyledPlaylist>
 );
 
 export default Playlist;

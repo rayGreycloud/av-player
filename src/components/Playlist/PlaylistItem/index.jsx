@@ -1,10 +1,12 @@
 import React from 'react';
 
+import StyledPlaylistItem from './StyledPlaylistItem';
+
 const PlaylistItem = () => {
   return (
-    <div>
+    <StyledPlaylistItem>
       <h2>Playlist Item</h2>
-    </div>
+    </StyledPlaylistItem>
   );
 };
 
