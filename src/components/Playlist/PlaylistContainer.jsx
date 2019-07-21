@@ -2,7 +2,7 @@ import React from 'react';
 
 import PlaylistHeader from './PlaylistHeader';
 import PlaylistItems from './PlaylistItems';
-import NightMode from '../Nightmode';
+import NightMode from '../NightMode';
 
 import StyledPlaylist from './StyledPlaylist';
 
