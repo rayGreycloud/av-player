@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { ThemeProvider } from 'styled-components';
 
 import Video from '../Video';
@@ -25,15 +25,88 @@ const themeLight = {
   color: '#353535'
 };
 
-const nightMode = true;
+const PlayerContainer = ({ match, location, history }) => {
+  // move playlist data out of markup into separate file
+  const videos = JSON.parse(document.querySelector('[name="videos"]').value);
 
-const PlayerContainer = props => (
-  <ThemeProvider theme={nightMode ? themeDark : themeLight}>
-    <StyledPlayer>
-      <Video />
-      <Playlist />
-    </StyledPlayer>
-  </ThemeProvider>
-);
+  // refactor into multiple hooks
+  const [state, setState] = useState({
+    videos: videos.playlist,
+    activeVideo: videos.playlist[0],
+    nightMode: true,
+    playlistId: videos.playlistId,
+    autoplay: false
+  });
+
+  // const videoPlaylist = videos.playlist;
+  // const [activeVideo, setActiveVideo] = useState(videos.playlist[0]);
+  // const [nightMode, setNightMode] = useState(true);
+  // const { playlistId } = videos;
+  // const [autoplay, setAutoplay] = useState(false);
+
+  useEffect(() => {
+    console.log('test');
+
+    const videoId = match.params.activeVideo;
+
+    if (videoId !== undefined) {
+      console.log('Not undefined');
+      const newActiveVideo = state.videos.findIndex(
+        video => video.id === videoId
+      );
+
+      // setActiveVideo(videoPlaylist[newActiveVideo]);
+      // setAutoplay(location.autoplay);
+      setState(prev => ({
+        ...prev,
+        activeVideo: prev.videos[newActiveVideo],
+        autoplay: location.autoplay
+      }));
+    } else {
+      console.log('pushed!');
+      history.push({
+        pathname: `/${state.activeVideo.id}`,
+        autoplay: false
+      });
+    }
+  }, [
+    history,
+    location.autoplay,
+    match.params.activeVideo,
+    state.activeVideo.id,
+    state.videos
+    // activeVideo.id,
+    // videoPlaylist
+  ]);
+
+  const nightModeCallback = () => {
+    setState(prevState => ({ ...prevState, nightMode: !prevState.nightMode }));
+  };
+
+  const endCallback = () => {};
+
+  const progressCallback = () => {};
+
+  return (
+    <ThemeProvider theme={state.nightMode ? themeDark : themeLight}>
+      {state.videos !== null ? (
+        <StyledPlayer>
+          <Video
+            active={state.activeVideo}
+            autoplay={state.autoplay}
+            endCallback={endCallback}
+            progressCallback={progressCallback}
+          />
+          <Playlist
+            videos={state.videos}
+            active={state.activeVideo}
+            nightModeCallback={nightModeCallback}
+            nightMode={state.nightMode}
+          />
+        </StyledPlayer>
+      ) : null}
+    </ThemeProvider>
+  );
+};
 
 export default PlayerContainer;
