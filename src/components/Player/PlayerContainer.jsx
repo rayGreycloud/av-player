@@ -83,13 +83,36 @@ const PlayerContainer = ({ match, location, history }) => {
     setState(prevState => ({ ...prevState, nightMode: !prevState.nightMode }));
   };
 
-  const endCallback = () => {};
+  const endCallback = () => {
+    const videoId = match.params.activeVideo;
+    const currentVideoIndex = state.videos.findIndex(
+      video => video.id === videoId
+    );
 
-  const progressCallback = () => {};
+    const nextVideo =
+      currentVideoIndex === state.videos.length - 1 ? 0 : currentVideoIndex + 1;
+
+    history.push({
+      pathname: `${state.videos[nextVideo].id}`,
+      autoplay: false
+    });
+  };
+
+  const progressCallback = e => {
+    if (e.playedSeconds > 10 && e.playedSeconds < 11) {
+      const videos = [...state.videos];
+      const playedVideo = videos.find(
+        video => video.id === state.activeVideo.id
+      );
+      playedVideo.played = true;
+
+      setState(prevState => ({ ...prevState, videos }));
+    }
+  };
 
   return (
     <ThemeProvider theme={state.nightMode ? themeDark : themeLight}>
-      {state.videos !== null ? (
+      {state.videos && (
         <StyledPlayer>
           <Video
             active={state.activeVideo}
@@ -104,7 +127,23 @@ const PlayerContainer = ({ match, location, history }) => {
             nightMode={state.nightMode}
           />
         </StyledPlayer>
-      ) : null}
+      )}
+      {/* {state.videos !== null ? (
+        <StyledPlayer>
+          <Video
+            active={state.activeVideo}
+            autoplay={state.autoplay}
+            endCallback={endCallback}
+            progressCallback={progressCallback}
+          />
+          <Playlist
+            videos={state.videos}
+            active={state.activeVideo}
+            nightModeCallback={nightModeCallback}
+            nightMode={state.nightMode}
+          />
+        </StyledPlayer>
+      ) : null} */}
     </ThemeProvider>
   );
 };
